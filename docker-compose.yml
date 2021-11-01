@@ -1,0 +1,29 @@
+version: "3.5"
+
+services:
+  selenium-hub:
+    image: selenium/hub:latest
+    ports:
+      - "4444:4444"
+      
+  chrome:
+    image: selenium/node-chrome
+    links:
+      - selenium-hub:selenium-hub
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+
+  udemy-free-courses-verifier:
+    image: udemy-free-courses-verifier:latest
+    ports:
+      - "8080:8080"     
+    depends_on:
+      - selenium-hub
+
+  mail:
+    image: mail:0.0.1
+    ports:
+      - "8081:8081"
